@@ -17,31 +17,72 @@ day1 :: proc(data_path: string) {
   dataArr := strings.split(string(data), "\n");
   sum := 0;
   for line in dataArr {
-    sum += combine_runes_to_int(get_first_and_last_digit(get_numbers_from_line(line)));  
+    sum += combine_runes_to_int(sort_nr_by_ind(get_numbers_from_line(line, true)));  
   }
-  fmt.println(sum)
+
+  fmt.println("Part 1:: ", sum)
+  sum = 0;
+  for line in dataArr {
+    sum += combine_runes_to_int(sort_nr_by_ind(get_numbers_from_line(line, false)));  
+  }
+  fmt.println("Part 2:: ", sum)
 }
 
-get_first_and_last_digit :: proc(nums: []Nr) -> (rune, rune) {
-  switch len(nums) {
-    case 0:
-      return '0', '0';
+sort_nr_by_ind :: proc(nrs:[]Nr) -> (rune, rune){
+  // sort the numbers by their index with bubble sort
+  for n1, i in nrs {
+    for n2, j in nrs {
+      if nrs[i].ind > nrs[j].ind {
+        nrs[i], nrs[j] = nrs[j], nrs[i]
+      }
+    }
+  }
+  r1, r2 : rune
+  switch len(nrs) {
+    case 0: 
+      r1, r2 = '0', '0'
     case 1: 
-      return nums[0].val, nums[0].val;
+      r1, r2 = nrs[0].val, nrs[0].val
     case: 
-      return nums[0].val, nums[len(nums)-1].val;
-  }
-  panic("this shit does not have a number");
+      r1, r2 = nrs[0].val, nrs[len(nrs)-1].val
+  } 
+  return r2, r1;
 }
 
-get_numbers_from_line :: proc(line: string) -> ([]Nr) {
+get_numbers_from_line :: proc(line: string, just_numbers: bool) -> ([]Nr) {
   ret : [dynamic]Nr;
+
   for r, i in line { // r is rune, i is index
-    if unicode.is_number(r) {
-      append(&ret, Nr{r, i});
+    if unicode.is_number(r) { 
+      append(&ret, Nr{r, i}); 
     } 
   }
-  return ret[:];
+  if just_numbers {
+    return ret[:];
+  } else {
+
+    num_names := make(map[string]rune)
+    num_names["one"] = '1'
+    num_names["two"] = '2'
+    num_names["three"] = '3'
+    num_names["four"] = '4'
+    num_names["five"] = '5'
+    num_names["six"] = '6'
+    num_names["seven"] = '7'
+    num_names["eight"] = '8'
+    num_names["nine"] = '9'
+    for num in num_names {
+      n := strings.index(line, num)
+      if n != -1 {
+        append(&ret, Nr{
+          num_names[num],
+          n,
+        })
+      } 
+    }
+    return ret[:];
+  }
+  panic("Something went wrong");
 }
 
 combine_runes_to_int :: proc(r1, r2: rune) -> int {
