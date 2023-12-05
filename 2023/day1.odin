@@ -31,7 +31,7 @@ get_first_and_last_digit :: proc(nums: []Nr) -> (rune, rune) {
     case: 
       return nums[0].val, nums[len(nums)-1].val;
   }
-  panic("this shit is not a number");
+  panic("this shit does not have a number");
 }
 
 get_numbers_from_line :: proc(line: string) -> ([]Nr) {
