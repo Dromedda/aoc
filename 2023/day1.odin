@@ -71,14 +71,22 @@ get_numbers_from_line :: proc(line: string, just_numbers: bool) -> ([]Nr) {
     num_names["seven"] = '7'
     num_names["eight"] = '8'
     num_names["nine"] = '9'
+
     for num in num_names {
-      n := strings.index(line, num)
+      n := strings.index(line, num) // THIS ONLY RETURNS THE FIRST FUCKEN NUMBER
+      n2 := strings.last_index(line, num)
       if n != -1 {
         append(&ret, Nr{
           num_names[num],
           n,
         })
       } 
+      if n2 != -1 {
+        append(&ret, Nr{
+          num_names[num],
+          n2,
+        })
+      }
     }
     return ret[:];
   }
