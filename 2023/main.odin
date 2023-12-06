@@ -13,7 +13,7 @@ main :: proc() {
     day1("data/day1.txt");
   case "2":
     fmt.println("Running Day 2");
-    day1("data/day2.txt");
+    day2("data/day2.txt");
   case: 
     fmt.println("Couldn't find day ::", os.args[1]);
     fmt.println("please try again");
